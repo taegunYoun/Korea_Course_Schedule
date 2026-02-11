@@ -38,73 +38,295 @@
             font-weight: 700;
         }
         
-        .controls {
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 30px;
-            padding: 30px;
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 20px 0;
         }
         
-        .controls h3 {
-            margin-bottom: 20px;
+        .semester-display {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e3c72;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .semester-display:hover {
+            background-color: #f0f4f8;
+        }
+        
+        .header-add-btn {
+            background: none;
             color: #2d3748;
-            font-size: 18px;
-            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-size: 32px;
+            padding: 0;
+            width: auto;
+            height: auto;
+            transition: all 0.2s ease;
         }
         
-        .input-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        .header-add-btn:hover {
+            transform: scale(1.15);
+        }
+        
+        .header-add-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .header-add-btn.active {
+            color: #ef5350;
+        }
+        
+        /* 학기 선택 모달 */
+        .semester-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .semester-modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .semester-modal-content h3 {
+            margin-bottom: 20px;
+            color: #1e3c72;
+            font-size: 18px;
+        }
+        
+        .semester-inputs {
+            display: flex;
             gap: 15px;
             margin-bottom: 20px;
         }
         
-        .input-group input, .input-group select {
+        .year-select, .semester-select {
+            flex: 1;
             padding: 12px 16px;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            background-color: #f8fafc;
+            color: #1e3c72;
+            cursor: pointer;
             transition: all 0.3s ease;
-            background-color: white;
         }
         
-        .input-group input:focus, .input-group select:focus {
+        .year-select:hover, .semester-select:hover {
+            border-color: #2196F3;
+        }
+        
+        .year-select:focus, .semester-select:focus {
             outline: none;
             border-color: #2196F3;
-            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+        }
+        
+        .semester-modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .controls-wrapper {
+            margin-bottom: 30px;
+        }
+        
+        .controls {
+            margin-bottom: 0;
+            padding: 35px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border: 1px solid rgba(30, 60, 114, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .controls.show {
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .utility-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            justify-content: center;
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .input-wrapper label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-left: 4px;
+        }
+        
+        .input-group input, .input-group select,
+        .input-wrapper input, .input-wrapper select {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+            font-family: inherit;
+        }
+        
+        .input-group input:focus, .input-group select:focus,
+        .input-wrapper input:focus, .input-wrapper select:focus {
+            outline: none;
+            border-color: #2196F3;
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+        }
+        
+        .color-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 15px;
+        }
+        
+        .color-section label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2d3748;
+            display: block;
+            margin-bottom: 12px;
+        }
+        
+        .color-palette {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         
         .btn {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+            padding: 13px 24px;
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
-            margin-right: 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .btn:hover {
+        .btn-primary {
+            background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+        }
+        
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(30, 136, 229, 0.6);
+            box-shadow: 0 6px 20px rgba(30, 136, 229, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #26a69a 0%, #00897b 100%);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(38, 166, 154, 0.4);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ef5350 0%, #e53935 100%);
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 83, 80, 0.4);
         }
         
         .btn:active {
             transform: translateY(0);
         }
         
-        .btn-delete {
-            background: linear-gradient(135deg, #f56565 0%, #c53030 100%);
-            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.4);
+        .color-btn {
+            width: 44px;
+            height: 44px;
+            border: 3px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            position: relative;
         }
         
-        .btn-delete:hover {
-            box-shadow: 0 6px 20px rgba(245, 101, 101, 0.6);
+        .color-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+        }
+        
+        .color-btn.active::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #1565c0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .color-btn:active {
+            transform: scale(0.95);
         }
         
         table {
@@ -119,8 +341,12 @@
         
         th, td {
             border: 1px solid #e2e8f0;
-            padding: 16px;
+            padding: 0;
             text-align: center;
+        }
+        
+        .time-cell, .period-header {
+            padding: 12px;
         }
         
         th {
@@ -149,17 +375,22 @@
             background-color: white;
             cursor: pointer;
             min-height: 70px;
+            height: 100%;
             position: relative;
             vertical-align: top;
-            padding: 8px;
+            padding: 0;
             transition: background-color 0.2s ease;
         }
         
         .class-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             display: flex;
-            gap: 8px;
+            gap: 0;
             flex-wrap: wrap;
-            height: 100%;
         }
         
         .class-cell:hover {
@@ -168,22 +399,29 @@
         
         .class-info {
             background-color: #e3f2fd;
-            border: 2px solid #2196F3;
-            border-radius: 10px;
+            border: none;
+            border-radius: 0;
             padding: 12px;
             font-size: 13px;
             line-height: 1.5;
             position: relative;
             flex: 1;
-            min-width: 130px;
-            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+            min-width: 100px;
+            box-shadow: none;
             transition: all 0.2s ease;
             cursor: pointer;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
         }
         
         .class-info:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.25);
+            filter: brightness(0.95);
+            z-index: 10;
         }
         
         .class-info:active {
@@ -283,16 +521,56 @@
             padding: 30px;
         }
         
+        .modal-input-group {
+            margin-bottom: 20px;
+        }
+        
+        .modal-input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        .modal-input-group input,
+        .modal-input-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+            font-family: inherit;
+        }
+        
+        .modal-input-group input:focus,
+        .modal-input-group select:focus {
+            outline: none;
+            border-color: #2196F3;
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+        }
+        
+        .modal-input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
         .modal-footer {
             padding: 20px 30px;
             background-color: #f7fafc;
             border-radius: 0 0 20px 20px;
-            text-align: right;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
         }
         
         .modal-footer .btn {
-            margin-left: 10px;
-            margin-right: 0;
+            margin: 0;
         }
         
         /* 반응형 디자인 */
@@ -330,62 +608,124 @@
 </head>
 <body>
     <div class="container">
-        <h1>📚 수강신청 시간표 (서울캠퍼스)</h1>
+        <div class="header">
+            <div class="semester-display" onclick="toggleSemesterEdit()">
+                <span id="semesterText">2026년 2학기</span>
+            </div>
+            <button class="header-add-btn" onclick="toggleControls()" id="headerAddBtn">
+                +
+            </button>
+        </div>
         
-        <div class="controls">
-            <h3 style="margin-bottom: 15px;">과목 추가</h3>
-            <div class="input-group">
-                <input type="text" id="courseName" placeholder="과목명" />
-                <input type="text" id="professor" placeholder="교수명" />
-                <input type="text" id="room" placeholder="강의실" />
-                <select id="day">
-                    <option value="">요일 선택</option>
-                    <option value="월">월요일</option>
-                    <option value="화">화요일</option>
-                    <option value="수">수요일</option>
-                    <option value="목">목요일</option>
-                    <option value="금">금요일</option>
-                </select>
-                <select id="startPeriod">
-                    <option value="">시작 교시</option>
-                    <option value="1">1교시</option>
-                    <option value="2">2교시</option>
-                    <option value="3">3교시</option>
-                    <option value="4">4교시</option>
-                    <option value="5">5교시</option>
-                    <option value="6">6교시</option>
-                    <option value="7">7교시</option>
-                    <option value="8">8교시</option>
-                    <option value="9">9교시</option>
-                    <option value="10">10교시</option>
-                </select>
-                <select id="endPeriod">
-                    <option value="">종료 교시</option>
-                    <option value="1">1교시</option>
-                    <option value="2">2교시</option>
-                    <option value="3">3교시</option>
-                    <option value="4">4교시</option>
-                    <option value="5">5교시</option>
-                    <option value="6">6교시</option>
-                    <option value="7">7교시</option>
-                    <option value="8">8교시</option>
-                    <option value="9">9교시</option>
-                    <option value="10">10교시</option>
-                </select>
+        <!-- 학기 선택 모달 -->
+        <div id="semesterModal" class="semester-modal" style="display: none;">
+            <div class="semester-modal-content">
+                <h3>학기 설정</h3>
+                <div class="semester-inputs">
+                    <select id="year" class="year-select">
+                        <option value="2026" selected>2026년</option>
+                        <option value="2027">2027년</option>
+                        <option value="2028">2028년</option>
+                        <option value="2029">2029년</option>
+                        <option value="2030">2030년</option>
+                        <option value="2031">2031년</option>
+                        <option value="2032">2032년</option>
+                        <option value="2033">2033년</option>
+                        <option value="2034">2034년</option>
+                        <option value="2035">2035년</option>
+                        <option value="2036">2036년</option>
+                    </select>
+                    <select id="semester" class="semester-select">
+                        <option value="1">1학기</option>
+                        <option value="2" selected>2학기</option>
+                    </select>
+                </div>
+                <div class="semester-modal-footer">
+                    <button class="btn btn-primary" onclick="saveSemester()">확인</button>
+                    <button class="btn btn-secondary" onclick="closeSemesterModal()">취소</button>
+                </div>
             </div>
-            <div class="color-options">
-                <span style="margin-right: 10px; font-size: 14px;">색상:</span>
-                <button class="color-btn" style="background-color: #e3f2fd; border-color: #2196F3;" onclick="selectColor('#e3f2fd', '#2196F3')"></button>
-                <button class="color-btn" style="background-color: #fff3e0; border-color: #ff9800;" onclick="selectColor('#fff3e0', '#ff9800')"></button>
-                <button class="color-btn" style="background-color: #f3e5f5; border-color: #9c27b0;" onclick="selectColor('#f3e5f5', '#9c27b0')"></button>
-                <button class="color-btn" style="background-color: #e8f5e9; border-color: #4caf50;" onclick="selectColor('#e8f5e9', '#4caf50')"></button>
-                <button class="color-btn" style="background-color: #fce4ec; border-color: #e91e63;" onclick="selectColor('#fce4ec', '#e91e63')"></button>
-            </div>
-            <div style="margin-top: 15px;">
-                <button class="btn" onclick="addCourse()">과목 추가</button>
-                <button class="btn btn-delete" onclick="clearAll()">전체 삭제</button>
-                <button class="btn" style="background-color: #28a745;" onclick="downloadTimetable()">📥 이미지로 저장</button>
-                <button class="btn" style="background-color: #17a2b8;" onclick="shareTimeTable()">🔗 공유하기</button>
+        </div>
+        
+        <div class="controls-wrapper">
+            <div class="controls" id="controlsPanel" style="display: none;">
+                <div class="input-row">
+                    <div class="input-wrapper">
+                        <label>과목명</label>
+                        <input type="text" id="courseName" placeholder="예: 데이터베이스설계" />
+                    </div>
+                    <div class="input-wrapper">
+                        <label>교수명</label>
+                        <input type="text" id="professor" placeholder="예: 김철수" />
+                    </div>
+                    <div class="input-wrapper">
+                        <label>강의실</label>
+                        <input type="text" id="room" placeholder="예: 공학관 301호" />
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-wrapper">
+                        <label>요일</label>
+                        <select id="day">
+                            <option value="">선택하세요</option>
+                            <option value="월">월요일</option>
+                            <option value="화">화요일</option>
+                            <option value="수">수요일</option>
+                            <option value="목">목요일</option>
+                            <option value="금">금요일</option>
+                        </select>
+                    </div>
+                    <div class="input-wrapper">
+                        <label>시작 교시</label>
+                        <select id="startPeriod">
+                            <option value="">선택하세요</option>
+                            <option value="1">1교시</option>
+                            <option value="2">2교시</option>
+                            <option value="3">3교시</option>
+                            <option value="4">4교시</option>
+                            <option value="5">5교시</option>
+                            <option value="6">6교시</option>
+                            <option value="7">7교시</option>
+                            <option value="8">8교시</option>
+                            <option value="9">9교시</option>
+                            <option value="10">10교시</option>
+                        </select>
+                    </div>
+                    <div class="input-wrapper">
+                        <label>종료 교시</label>
+                        <select id="endPeriod">
+                            <option value="">선택하세요</option>
+                            <option value="1">1교시</option>
+                            <option value="2">2교시</option>
+                            <option value="3">3교시</option>
+                            <option value="4">4교시</option>
+                            <option value="5">5교시</option>
+                            <option value="6">6교시</option>
+                            <option value="7">7교시</option>
+                            <option value="8">8교시</option>
+                            <option value="9">9교시</option>
+                            <option value="10">10교시</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="color-section">
+                    <label>색상 선택</label>
+                    <div class="color-palette">
+                        <button class="color-btn active" style="background-color: #e3f2fd; border-color: #2196F3;" onclick="selectColor('#e3f2fd', '#2196F3')" title="파랑"></button>
+                        <button class="color-btn" style="background-color: #fff3e0; border-color: #ff9800;" onclick="selectColor('#fff3e0', '#ff9800')" title="주황"></button>
+                        <button class="color-btn" style="background-color: #f3e5f5; border-color: #9c27b0;" onclick="selectColor('#f3e5f5', '#9c27b0')" title="보라"></button>
+                        <button class="color-btn" style="background-color: #e8f5e9; border-color: #4caf50;" onclick="selectColor('#e8f5e9', '#4caf50')" title="초록"></button>
+                        <button class="color-btn" style="background-color: #fce4ec; border-color: #e91e63;" onclick="selectColor('#fce4ec', '#e91e63')" title="분홍"></button>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="addCourse()">
+                        과목 추가
+                    </button>
+                </div>
             </div>
         </div>
         
@@ -494,6 +834,15 @@
                 </tr>
             </tbody>
         </table>
+        
+        <div class="utility-buttons">
+            <button class="btn btn-primary" onclick="downloadTimetable()">
+                Save as Image
+            </button>
+            <button class="btn btn-danger" onclick="clearAll()">
+                Clear All
+            </button>
+        </div>
     </div>
 
     <!-- 수정/삭제 모달 -->
@@ -501,58 +850,84 @@
         <div class="modal-content">
             <h2>과목 수정/삭제</h2>
             <div class="modal-body">
-                <div class="input-group">
-                    <input type="text" id="editCourseName" placeholder="과목명" />
-                    <input type="text" id="editProfessor" placeholder="교수명" />
-                    <input type="text" id="editRoom" placeholder="강의실" />
+                <div class="modal-input-group">
+                    <label>과목명</label>
+                    <input type="text" id="editCourseName" placeholder="예: 데이터베이스설계" />
+                </div>
+                
+                <div class="modal-input-group">
+                    <label>교수명</label>
+                    <input type="text" id="editProfessor" placeholder="예: 김철수" />
+                </div>
+                
+                <div class="modal-input-group">
+                    <label>강의실</label>
+                    <input type="text" id="editRoom" placeholder="예: 공학관 301호" />
+                </div>
+                
+                <div class="modal-input-group">
+                    <label>요일</label>
                     <select id="editDay">
-                        <option value="">요일 선택</option>
+                        <option value="">선택하세요</option>
                         <option value="월">월요일</option>
                         <option value="화">화요일</option>
                         <option value="수">수요일</option>
                         <option value="목">목요일</option>
                         <option value="금">금요일</option>
                     </select>
-                    <select id="editStartPeriod">
-                        <option value="">시작 교시</option>
-                        <option value="1">1교시</option>
-                        <option value="2">2교시</option>
-                        <option value="3">3교시</option>
-                        <option value="4">4교시</option>
-                        <option value="5">5교시</option>
-                        <option value="6">6교시</option>
-                        <option value="7">7교시</option>
-                        <option value="8">8교시</option>
-                        <option value="9">9교시</option>
-                        <option value="10">10교시</option>
-                    </select>
-                    <select id="editEndPeriod">
-                        <option value="">종료 교시</option>
-                        <option value="1">1교시</option>
-                        <option value="2">2교시</option>
-                        <option value="3">3교시</option>
-                        <option value="4">4교시</option>
-                        <option value="5">5교시</option>
-                        <option value="6">6교시</option>
-                        <option value="7">7교시</option>
-                        <option value="8">8교시</option>
-                        <option value="9">9교시</option>
-                        <option value="10">10교시</option>
-                    </select>
                 </div>
-                <div class="color-options">
-                    <span style="margin-right: 10px; font-size: 14px;">색상:</span>
-                    <button class="color-btn" style="background-color: #e3f2fd; border-color: #2196F3;" onclick="selectEditColor('#e3f2fd', '#2196F3')"></button>
-                    <button class="color-btn" style="background-color: #fff3e0; border-color: #ff9800;" onclick="selectEditColor('#fff3e0', '#ff9800')"></button>
-                    <button class="color-btn" style="background-color: #f3e5f5; border-color: #9c27b0;" onclick="selectEditColor('#f3e5f5', '#9c27b0')"></button>
-                    <button class="color-btn" style="background-color: #e8f5e9; border-color: #4caf50;" onclick="selectEditColor('#e8f5e9', '#4caf50')"></button>
-                    <button class="color-btn" style="background-color: #fce4ec; border-color: #e91e63;" onclick="selectEditColor('#fce4ec', '#e91e63')"></button>
+                
+                <div class="modal-input-row">
+                    <div class="modal-input-group">
+                        <label>시작 교시</label>
+                        <select id="editStartPeriod">
+                            <option value="">선택하세요</option>
+                            <option value="1">1교시</option>
+                            <option value="2">2교시</option>
+                            <option value="3">3교시</option>
+                            <option value="4">4교시</option>
+                            <option value="5">5교시</option>
+                            <option value="6">6교시</option>
+                            <option value="7">7교시</option>
+                            <option value="8">8교시</option>
+                            <option value="9">9교시</option>
+                            <option value="10">10교시</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modal-input-group">
+                        <label>종료 교시</label>
+                        <select id="editEndPeriod">
+                            <option value="">선택하세요</option>
+                            <option value="1">1교시</option>
+                            <option value="2">2교시</option>
+                            <option value="3">3교시</option>
+                            <option value="4">4교시</option>
+                            <option value="5">5교시</option>
+                            <option value="6">6교시</option>
+                            <option value="7">7교시</option>
+                            <option value="8">8교시</option>
+                            <option value="9">9교시</option>
+                            <option value="10">10교시</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="color-section">
+                    <label>색상 선택</label>
+                    <div class="color-palette">
+                        <button class="color-btn" style="background-color: #e3f2fd; border-color: #2196F3;" onclick="selectEditColor('#e3f2fd', '#2196F3')" title="파랑"></button>
+                        <button class="color-btn" style="background-color: #fff3e0; border-color: #ff9800;" onclick="selectEditColor('#fff3e0', '#ff9800')" title="주황"></button>
+                        <button class="color-btn" style="background-color: #f3e5f5; border-color: #9c27b0;" onclick="selectEditColor('#f3e5f5', '#9c27b0')" title="보라"></button>
+                        <button class="color-btn" style="background-color: #e8f5e9; border-color: #4caf50;" onclick="selectEditColor('#e8f5e9', '#4caf50')" title="초록"></button>
+                        <button class="color-btn" style="background-color: #fce4ec; border-color: #e91e63;" onclick="selectEditColor('#fce4ec', '#e91e63')" title="분홍"></button>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn" onclick="saveCourseEdit()">💾 저장</button>
-                <button class="btn btn-delete" onclick="deleteCourseFromModal()">🗑️ 삭제</button>
-                <button class="btn" style="background: linear-gradient(135deg, #757575 0%, #616161 100%);" onclick="closeModal()">취소</button>
+                <button class="btn btn-primary" onclick="saveCourseEdit()">저장</button>
+                <button class="btn btn-primary" onclick="deleteCourseFromModal()">삭제</button>
+                <button class="btn btn-secondary" onclick="closeModal()">취소</button>
             </div>
         </div>
     </div>
@@ -566,17 +941,83 @@
         let editingCourseId = null;
         let editColor = '#e3f2fd';
         let editBorderColor = '#2196F3';
+        
+        // 과목 추가 패널 토글
+        function toggleControls() {
+            const panel = document.getElementById('controlsPanel');
+            const btn = document.getElementById('headerAddBtn');
+            
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                panel.classList.add('show');
+                btn.classList.add('active');
+                btn.textContent = '×';
+            } else {
+                panel.style.display = 'none';
+                panel.classList.remove('show');
+                btn.classList.remove('active');
+                btn.textContent = '+';
+            }
+        }
+        
+        // 학기 설정 모달 열기
+        function toggleSemesterEdit() {
+            document.getElementById('semesterModal').style.display = 'block';
+        }
+        
+        // 학기 설정 모달 닫기
+        function closeSemesterModal() {
+            document.getElementById('semesterModal').style.display = 'none';
+        }
+        
+        // 학기 저장
+        function saveSemester() {
+            const year = document.getElementById('year').value;
+            const semester = document.getElementById('semester').value;
+            document.getElementById('semesterText').textContent = `${year}년 ${semester}학기`;
+            closeSemesterModal();
+        }
+        
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            const editModal = document.getElementById('editModal');
+            const semesterModal = document.getElementById('semesterModal');
+            
+            if (event.target === editModal) {
+                closeModal();
+            }
+            
+            if (event.target === semesterModal) {
+                closeSemesterModal();
+            }
+        }
 
         // 색상 선택
         function selectColor(color, border) {
             selectedColor = color;
             selectedBorder = border;
+            
+            // 모든 색상 버튼에서 active 클래스 제거
+            document.querySelectorAll('.controls .color-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 클릭한 버튼에 active 클래스 추가
+            event.target.classList.add('active');
         }
         
         // 수정 모달 색상 선택
         function selectEditColor(color, border) {
             editColor = color;
             editBorderColor = border;
+            
+            // 모든 색상 버튼에서 active 클래스 제거
+            document.querySelectorAll('.modal-body .color-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 클릭한 버튼에 active 클래스 추가
+            event.target.classList.add('active');
         }
         
         // 모달 열기
@@ -595,7 +1036,27 @@
             document.getElementById('editStartPeriod').value = course.startPeriod;
             document.getElementById('editEndPeriod').value = course.endPeriod;
             
+            // 색상 버튼 active 상태 업데이트
+            document.querySelectorAll('.modal-body .color-btn').forEach(btn => {
+                btn.classList.remove('active');
+                const btnColor = btn.style.backgroundColor;
+                if (btnColor === course.color || rgbToHex(btnColor) === course.color) {
+                    btn.classList.add('active');
+                }
+            });
+            
             document.getElementById('editModal').style.display = 'block';
+        }
+        
+        // RGB를 HEX로 변환 (색상 비교용)
+        function rgbToHex(rgb) {
+            if (rgb.startsWith('#')) return rgb;
+            const result = rgb.match(/\d+/g);
+            if (!result) return rgb;
+            return '#' + result.map(x => {
+                const hex = parseInt(x).toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            }).join('');
         }
         
         // 모달 닫기
@@ -730,142 +1191,141 @@
 
         // 시간표 렌더링
         function renderTimetable() {
-            // 모든 셀 초기화
-            document.querySelectorAll('.class-cell').forEach(cell => {
-                cell.innerHTML = '';
-            });
-
-            // 각 요일별로 처리
-            const days = ['월', '화', '수', '목', '금'];
+            // 테이블 바디 완전히 새로 생성
+            const tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
             
+            const days = ['월', '화', '수', '목', '금'];
+            const periods = [
+                { num: 1, time: '09:00~10:15', rest: '15분 휴식' },
+                { num: 2, time: '10:30~11:45', rest: '15분 휴식' },
+                { num: 3, time: '12:00~13:15', rest: '15분 휴식' },
+                { num: 4, time: '13:30~14:45', rest: '15분 휴식' },
+                { num: 5, time: '15:00~16:15', rest: '15분 휴식' },
+                { num: 6, time: '16:30~17:45', rest: '15분 휴식' },
+                { num: 7, time: '18:00~18:50', rest: '10분 휴식' },
+                { num: 8, time: '19:00~19:50', rest: '10분 휴식' },
+                { num: 9, time: '20:00~20:50', rest: '10분 휴식' },
+                { num: 10, time: '21:00~21:50', rest: '10분 휴식' }
+            ];
+            
+            // 각 요일별로 어느 교시를 skip 해야 하는지 추적
+            const skipCells = {};
             days.forEach(day => {
-                // 이 요일의 모든 과목 가져오기
-                const dayCourses = courses.filter(c => c.day === day);
+                skipCells[day] = new Set();
+            });
+            
+            // 과목 배치 및 skip 셀 표시
+            courses.forEach(course => {
+                const day = course.day;
+                const start = course.startPeriod;
+                const end = course.endPeriod;
                 
-                // 과목별로 차지하는 교시 범위 계산하여 열 배치
-                const courseColumns = [];
+                // 연속 교시는 skip 표시 (시작 교시 제외)
+                for (let p = start + 1; p <= end; p++) {
+                    skipCells[day].add(p);
+                }
+            });
+            
+            // 테이블 행 생성
+            periods.forEach(period => {
+                const tr = document.createElement('tr');
                 
-                dayCourses.forEach(course => {
-                    // 이 과목과 겹치는 기존 열이 있는지 확인
-                    let columnIndex = -1;
+                // 교시 번호
+                const tdPeriod = document.createElement('td');
+                tdPeriod.className = 'period-header';
+                tdPeriod.textContent = period.num;
+                tr.appendChild(tdPeriod);
+                
+                // 시간
+                const tdTime = document.createElement('td');
+                tdTime.className = 'time-cell';
+                tdTime.innerHTML = `${period.time}<br><small>${period.rest}</small>`;
+                tr.appendChild(tdTime);
+                
+                // 각 요일
+                days.forEach(day => {
+                    // 이 셀을 skip 해야 하는가?
+                    if (skipCells[day].has(period.num)) {
+                        return; // 셀을 생성하지 않음
+                    }
                     
-                    for (let i = 0; i < courseColumns.length; i++) {
-                        let hasConflict = false;
-                        
-                        for (let existingCourse of courseColumns[i]) {
-                            // 교시가 겹치는지 확인
-                            if (!(course.endPeriod < existingCourse.startPeriod || 
-                                  course.startPeriod > existingCourse.endPeriod)) {
-                                hasConflict = true;
-                                break;
+                    const td = document.createElement('td');
+                    td.className = 'class-cell';
+                    
+                    // 이 교시에서 시작하는 과목 찾기
+                    const coursesAtPeriod = courses.filter(c => 
+                        c.day === day && c.startPeriod === period.num
+                    );
+                    
+                    if (coursesAtPeriod.length > 0) {
+                        // 가장 긴 과목의 rowspan 계산
+                        let maxRowspan = 1;
+                        coursesAtPeriod.forEach(course => {
+                            const rowspan = course.endPeriod - course.startPeriod + 1;
+                            if (rowspan > maxRowspan) {
+                                maxRowspan = rowspan;
                             }
+                        });
+                        
+                        // rowspan 설정
+                        if (maxRowspan > 1) {
+                            td.rowSpan = maxRowspan;
                         }
                         
-                        if (!hasConflict) {
-                            columnIndex = i;
-                            break;
-                        }
+                        const container = document.createElement('div');
+                        container.className = 'class-container';
+                        
+                        coursesAtPeriod.forEach(course => {
+                            const classDiv = document.createElement('div');
+                            classDiv.className = 'class-info';
+                            classDiv.style.backgroundColor = course.color;
+                            classDiv.style.borderColor = course.borderColor;
+                            classDiv.onclick = function() {
+                                openEditModal(course.id);
+                            };
+                            
+                            // 과목명
+                            const nameDiv = document.createElement('div');
+                            nameDiv.className = 'class-name';
+                            nameDiv.textContent = course.courseName;
+                            classDiv.appendChild(nameDiv);
+                            
+                            // 교수명
+                            if (course.professor) {
+                                const profDiv = document.createElement('div');
+                                profDiv.className = 'class-detail';
+                                profDiv.textContent = `👤 ${course.professor}`;
+                                classDiv.appendChild(profDiv);
+                            }
+                            
+                            // 강의실
+                            if (course.room) {
+                                const roomDiv = document.createElement('div');
+                                roomDiv.className = 'class-detail';
+                                roomDiv.textContent = `📍 ${course.room}`;
+                                classDiv.appendChild(roomDiv);
+                            }
+                            
+                            // 교시 정보
+                            const periodDiv = document.createElement('div');
+                            periodDiv.className = 'class-detail';
+                            const periodText = course.startPeriod === course.endPeriod 
+                                ? `🕐 ${course.startPeriod}교시` 
+                                : `🕐 ${course.startPeriod}-${course.endPeriod}교시`;
+                            periodDiv.textContent = periodText;
+                            classDiv.appendChild(periodDiv);
+                            
+                            container.appendChild(classDiv);
+                        });
+                        
+                        td.appendChild(container);
                     }
                     
-                    // 겹치지 않는 열이 있으면 추가, 없으면 새 열 생성
-                    if (columnIndex === -1) {
-                        courseColumns.push([course]);
-                    } else {
-                        courseColumns[columnIndex].push(course);
-                    }
+                    tr.appendChild(td);
                 });
                 
-                // 각 교시별로 렌더링
-                for (let period = 1; period <= 10; period++) {
-                    const cell = document.querySelector(`[data-day="${day}"][data-period="${period}"]`);
-                    if (!cell) continue;
-                    
-                    const container = document.createElement('div');
-                    container.className = 'class-container';
-                    
-                    // 모든 열에 대해 처리 (과목이 없어도 빈 공간 추가)
-                    for (let colIdx = 0; colIdx < courseColumns.length; colIdx++) {
-                        const column = courseColumns[colIdx];
-                        const coursesInPeriod = column.filter(c => 
-                            c.startPeriod <= period && c.endPeriod >= period
-                        );
-                        
-                        if (coursesInPeriod.length > 0) {
-                            const course = coursesInPeriod[0];
-                            
-                            // 시작 교시인 경우만 전체 정보 표시
-                            if (course.startPeriod === period) {
-                                const classDiv = document.createElement('div');
-                                classDiv.className = 'class-info';
-                                classDiv.style.backgroundColor = course.color;
-                                classDiv.style.borderColor = course.borderColor;
-                                classDiv.onclick = function() {
-                                    openEditModal(course.id);
-                                };
-                                
-                                // 과목명
-                                const nameDiv = document.createElement('div');
-                                nameDiv.className = 'class-name';
-                                nameDiv.textContent = course.courseName;
-                                classDiv.appendChild(nameDiv);
-                                
-                                // 교수명
-                                if (course.professor) {
-                                    const profDiv = document.createElement('div');
-                                    profDiv.className = 'class-detail';
-                                    profDiv.textContent = `👤 ${course.professor}`;
-                                    classDiv.appendChild(profDiv);
-                                }
-                                
-                                // 강의실
-                                if (course.room) {
-                                    const roomDiv = document.createElement('div');
-                                    roomDiv.className = 'class-detail';
-                                    roomDiv.textContent = `📍 ${course.room}`;
-                                    classDiv.appendChild(roomDiv);
-                                }
-                                
-                                // 교시 정보
-                                const periodDiv = document.createElement('div');
-                                periodDiv.className = 'class-detail';
-                                const periodText = course.startPeriod === course.endPeriod 
-                                    ? `🕐 ${course.startPeriod}교시` 
-                                    : `🕐 ${course.startPeriod}-${course.endPeriod}교시`;
-                                periodDiv.textContent = periodText;
-                                classDiv.appendChild(periodDiv);
-                                
-                                container.appendChild(classDiv);
-                            } else {
-                                // 연속 교시인 경우 화살표만 표시
-                                const continueDiv = document.createElement('div');
-                                continueDiv.className = 'class-info';
-                                continueDiv.style.backgroundColor = course.color;
-                                continueDiv.style.borderColor = course.borderColor;
-                                continueDiv.style.opacity = '0.7';
-                                
-                                const nameDiv = document.createElement('div');
-                                nameDiv.className = 'class-name';
-                                nameDiv.style.fontSize = '12px';
-                                nameDiv.textContent = `↑ ${course.courseName}`;
-                                continueDiv.appendChild(nameDiv);
-                                
-                                container.appendChild(continueDiv);
-                            }
-                        } else {
-                            // 이 열에 과목이 없으면 빈 공간 추가 (열 정렬 유지)
-                            const emptyDiv = document.createElement('div');
-                            emptyDiv.className = 'class-info';
-                            emptyDiv.style.visibility = 'hidden';
-                            emptyDiv.style.border = 'none';
-                            emptyDiv.style.backgroundColor = 'transparent';
-                            container.appendChild(emptyDiv);
-                        }
-                    }
-                    
-                    if (container.children.length > 0) {
-                        cell.appendChild(container);
-                    }
-                }
+                tbody.appendChild(tr);
             });
         }
 
