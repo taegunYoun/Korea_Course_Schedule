@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수강신청 시간표</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        
+        .controls {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .input-group input, .input-group select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        
+        .btn-delete {
+            background-color: #dc3545;
+        }
+        
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        th {
+            background-color: #343a40;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .period-header {
+            background-color: #6c757d;
+            color: white;
+            font-weight: bold;
+            width: 80px;
+        }
+        
+        .time-cell {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .class-cell {
+            background-color: white;
+            cursor: pointer;
+            min-height: 60px;
+            position: relative;
+            vertical-align: top;
+            padding: 4px;
+        }
+        
+        .class-container {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        
+        .class-cell:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .class-info {
+            background-color: #e3f2fd;
+            border: 2px solid #2196F3;
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 13px;
+            line-height: 1.4;
+            position: relative;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .class-name {
+            font-weight: bold;
+            color: #1976D2;
+            margin-bottom: 4px;
+        }
+        
+        .class-detail {
+            font-size: 11px;
+            color: #555;
+        }
+        
+        .delete-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+        
+        .color-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .color-btn {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .color-btn:hover {
+            border-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 수강신청 시간표 (서울캠퍼스)</h1>
+        
+        <div class="controls">
+            <h3 style="margin-bottom: 15px;">과목 추가</h3>
+            <div class="input-group">
+                <input type="text" id="courseName" placeholder="과목명" />
+                <input type="text" id="professor" placeholder="교수명" />
+                <input type="text" id="room" placeholder="강의실" />
+                <select id="day">
+                    <option value="">요일 선택</option>
+                    <option value="월">월요일</option>
+                    <option value="화">화요일</option>
+                    <option value="수">수요일</option>
+                    <option value="목">목요일</option>
+                    <option value="금">금요일</option>
+                </select>
+                <select id="startPeriod">
+                    <option value="">시작 교시</option>
+                    <option value="1">1교시</option>
+                    <option value="2">2교시</option>
+                    <option value="3">3교시</option>
+                    <option value="4">4교시</option>
+                    <option value="5">5교시</option>
+                    <option value="6">6교시</option>
+                    <option value="7">7교시</option>
+                    <option value="8">8교시</option>
+                    <option value="9">9교시</option>
+                    <option value="10">10교시</option>
+                </select>
+                <select id="endPeriod">
+                    <option value="">종료 교시</option>
+                    <option value="1">1교시</option>
+                    <option value="2">2교시</option>
+                    <option value="3">3교시</option>
+                    <option value="4">4교시</option>
+                    <option value="5">5교시</option>
+                    <option value="6">6교시</option>
+                    <option value="7">7교시</option>
+                    <option value="8">8교시</option>
+                    <option value="9">9교시</option>
+                    <option value="10">10교시</option>
+                </select>
+            </div>
+            <div class="color-options">
+                <span style="margin-right: 10px; font-size: 14px;">색상:</span>
+                <button class="color-btn" style="background-color: #e3f2fd; border-color: #2196F3;" onclick="selectColor('#e3f2fd', '#2196F3')"></button>
+                <button class="color-btn" style="background-color: #fff3e0; border-color: #ff9800;" onclick="selectColor('#fff3e0', '#ff9800')"></button>
+                <button class="color-btn" style="background-color: #f3e5f5; border-color: #9c27b0;" onclick="selectColor('#f3e5f5', '#9c27b0')"></button>
+                <button class="color-btn" style="background-color: #e8f5e9; border-color: #4caf50;" onclick="selectColor('#e8f5e9', '#4caf50')"></button>
+                <button class="color-btn" style="background-color: #fce4ec; border-color: #e91e63;" onclick="selectColor('#fce4ec', '#e91e63')"></button>
+            </div>
+            <div style="margin-top: 15px;">
+                <button class="btn" onclick="addCourse()">과목 추가</button>
+                <button class="btn btn-delete" onclick="clearAll()">전체 삭제</button>
+                <button class="btn" style="background-color: #28a745;" onclick="downloadTimetable()">📥 이미지로 저장</button>
+                <button class="btn" style="background-color: #17a2b8;" onclick="shareTimeTable()">🔗 공유하기</button>
+            </div>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="period-header">교시<br>(Period)</th>
+                    <th>시간</th>
+                    <th>월 (Mon)</th>
+                    <th>화 (Tue)</th>
+                    <th>수 (Wed)</th>
+                    <th>목 (Thu)</th>
+                    <th>금 (Fri)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="period-header">1</td>
+                    <td class="time-cell">09:00~10:15<br><small>15분 휴식</small></td>
+                    <td class="class-cell" data-day="월" data-period="1"></td>
+                    <td class="class-cell" data-day="화" data-period="1"></td>
+                    <td class="class-cell" data-day="수" data-period="1"></td>
+                    <td class="class-cell" data-day="목" data-period="1"></td>
+                    <td class="class-cell" data-day="금" data-period="1"></td>
+                </tr>
+                <tr>
+                    <td class="period-header">2</td>
+                    <td class="time-cell">10:30~11:45<br><small>15분 휴식</small></td>
+                    <td class="class-cell" data-day="월" data-period="2"></td>
+                    <td class="class-cell" data-day="화" data-period="2"></td>
+                    <td class="class-cell" data-day="수" data-period="2"></td>
+                    <td class="class-cell" data-day="목" data-period="2"></td>
+                    <td class="class-cell" data-day="금" data-period="2"></td>
+                </tr>
+                <tr>
+                    <td class="period-header">3</td>
+                    <td class="time-cell">12:00~13:15<br><small>15분 휴식</small></td>
+                    <td class="class-cell" data-day="월" data-period="3"></td>
+                    <td class="class-cell" data-day="화" data-period="3"></td>
+                    <td class="class-cell" data-day="수" data-period="3"></td>
+                    <td class="class-cell" data-day="목" data-period="3"></td>
+                    <td class="class-cell" data-day="금" data-period="3"></td>
+                </tr>
+                <tr>
+                    <td class="period-header">4</td>
+                    <td class="time-cell">13:30~14:45<br><small>15분 휴식</small></td>
+                    <td class="class-cell" data-day="월" data-period="4"></td>
+                    <td class="class-cell" data-day="화" data-period="4"></td>
+                    <td class="class-cell" data-day="수" data-period="4"></td>
+                    <td class="class-cell" data-day="목" data-period="4"></td>
+                    <td class="class-cell" data-day="금" data-period="4"></td>
+                </tr>
+                <tr>
+                    <td class="period-header">5</td>
+                    <td class="time-cell">15:00~16:15<br><small>15분 휴식</small></td>
+                    <td class="class-cell" data-day="월" data-period="5"></td>
+                    <td class="class-cell" data-day="화" data-period="5"></td>
+                    <td class="class-cell" data-day="수" data-period="5"></td>
+                    <td class="class-cell" data-day="목" data-period="5"></td>
+                    <td class="class-cell" data-day="금" data-period="5"></td>
+                </tr>
+                <tr>
+                    <td class="period-header">6</td>
+                    <td class="time-cell">16:30~17:45<br><small>15분 휴식</small></td>
+                    <td class="class-cell" data-day="월" data-period="6"></td>
+                    <td class="class-cell" data-day="화" data-period="6"></td>
+                    <td class="class-cell" data-day="수" data-period="6"></td>
+                    <td class="class-cell" data-day="목" data-period="6"></td>
+                    <td class="class-cell" data-day="금" data-period="6"></td>
+                </tr>
+                <tr>
+                    <td class="period-header">7</td>
+                    <td class="time-cell">18:00~18:50<br><small>10분 휴식</small></td>
+                    <td class="class-cell" data-day="월" data-period="7"></td>
+                    <td class="class-cell" data-day="화" data-period="7"></td>
+                    <td class="class-cell" data-day="수" data-period="7"></td>
+                    <td class="class-cell" data-day="목" data-period="7"></td>
+                    <td class="class-cell" data-day="금" data-period="7"></td>
+                </tr>
+                <tr>
+                    <td class="period-header">8</td>
+                    <td class="time-cell">19:00~19:50<br><small>10분 휴식</small></td>
+                    <td class="class-cell" data-day="월" data-period="8"></td>
+                    <td class="class-cell" data-day="화" data-period="8"></td>
+                    <td class="class-cell" data-day="수" data-period="8"></td>
+                    <td class="class-cell" data-day="목" data-period="8"></td>
+                    <td class="class-cell" data-day="금" data-period="8"></td>
+                </tr>
+                <tr>
+                    <td class="period-header">9</td>
+                    <td class="time-cell">20:00~20:50<br><small>10분 휴식</small></td>
+                    <td class="class-cell" data-day="월" data-period="9"></td>
+                    <td class="class-cell" data-day="화" data-period="9"></td>
+                    <td class="class-cell" data-day="수" data-period="9"></td>
+                    <td class="class-cell" data-day="목" data-period="9"></td>
+                    <td class="class-cell" data-day="금" data-period="9"></td>
+                </tr>
+                <tr>
+                    <td class="period-header">10</td>
+                    <td class="time-cell">21:00~21:50<br><small>10분 휴식</small></td>
+                    <td class="class-cell" data-day="월" data-period="10"></td>
+                    <td class="class-cell" data-day="화" data-period="10"></td>
+                    <td class="class-cell" data-day="수" data-period="10"></td>
+                    <td class="class-cell" data-day="목" data-period="10"></td>
+                    <td class="class-cell" data-day="금" data-period="10"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // 전역 변수
+        let courses = [];
+        let selectedColor = '#e3f2fd';
+        let selectedBorder = '#2196F3';
+
+        // 색상 선택
+        function selectColor(color, border) {
+            selectedColor = color;
+            selectedBorder = border;
+        }
+
+        // 로컬 스토리지에서 데이터 불러오기
+        function loadData() {
+            const saved = localStorage.getItem('timetable');
+            if (saved) {
+                courses = JSON.parse(saved);
+                renderTimetable();
+            }
+        }
+
+        // 로컬 스토리지에 데이터 저장
+        function saveData() {
+            localStorage.setItem('timetable', JSON.stringify(courses));
+        }
+
+        // 과목 추가
+        function addCourse() {
+            const courseName = document.getElementById('courseName').value.trim();
+            const professor = document.getElementById('professor').value.trim();
+            const room = document.getElementById('room').value.trim();
+            const day = document.getElementById('day').value;
+            const startPeriod = parseInt(document.getElementById('startPeriod').value);
+            const endPeriod = parseInt(document.getElementById('endPeriod').value);
+
+            if (!courseName || !day || !startPeriod || !endPeriod) {
+                alert('과목명, 요일, 시작/종료 교시를 모두 입력해주세요.');
+                return;
+            }
+
+            if (startPeriod > endPeriod) {
+                alert('시작 교시가 종료 교시보다 클 수 없습니다.');
+                return;
+            }
+
+            const newCourse = {
+                id: Date.now(),
+                courseName: courseName,
+                professor: professor,
+                room: room,
+                day: day,
+                startPeriod: startPeriod,
+                endPeriod: endPeriod,
+                color: selectedColor,
+                borderColor: selectedBorder
+            };
+
+            courses.push(newCourse);
+            saveData();
+            renderTimetable();
+
+            // 입력 필드 초기화
+            document.getElementById('courseName').value = '';
+            document.getElementById('professor').value = '';
+            document.getElementById('room').value = '';
+            document.getElementById('day').value = '';
+            document.getElementById('startPeriod').value = '';
+            document.getElementById('endPeriod').value = '';
+        }
+
+        // 과목 삭제
+        function deleteCourse(courseId) {
+            console.log('Deleting course with ID:', courseId);
+            console.log('Current courses:', courses);
+            
+            if (!confirm('이 과목을 삭제하시겠습니까?')) {
+                return;
+            }
+            
+            const beforeLength = courses.length;
+            courses = courses.filter(c => c.id !== courseId);
+            const afterLength = courses.length;
+            
+            console.log('Before:', beforeLength, 'After:', afterLength);
+            
+            if (beforeLength === afterLength) {
+                console.log('WARNING: Course not found!');
+            } else {
+                console.log('Successfully deleted');
+                saveData();
+                renderTimetable();
+            }
+        }
+
+        // 전체 삭제
+        function clearAll() {
+            if (confirm('모든 과목을 삭제하시겠습니까?')) {
+                courses = [];
+                saveData();
+                renderTimetable();
+            }
+        }
+
+        // 시간표 렌더링
+        function renderTimetable() {
+            // 모든 셀 초기화
+            document.querySelectorAll('.class-cell').forEach(cell => {
+                cell.innerHTML = '';
+            });
+
+            // 각 요일별로 처리
+            const days = ['월', '화', '수', '목', '금'];
+            
+            days.forEach(day => {
+                // 이 요일의 모든 과목 가져오기
+                const dayCourses = courses.filter(c => c.day === day);
+                
+                // 과목별로 차지하는 교시 범위 계산
+                const courseColumns = [];
+                
+                dayCourses.forEach(course => {
+                    // 이 과목과 겹치는 기존 열이 있는지 확인
+                    let columnIndex = -1;
+                    
+                    for (let i = 0; i < courseColumns.length; i++) {
+                        let hasConflict = false;
+                        
+                        for (let existingCourse of courseColumns[i]) {
+                            // 교시가 겹치는지 확인
+                            if (!(course.endPeriod < existingCourse.startPeriod || 
+                                  course.startPeriod > existingCourse.endPeriod)) {
+                                hasConflict = true;
+                                break;
+                            }
+                        }
+                        
+                        if (!hasConflict) {
+                            columnIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    // 겹치지 않는 열이 있으면 추가, 없으면 새 열 생성
+                    if (columnIndex === -1) {
+                        courseColumns.push([course]);
+                    } else {
+                        courseColumns[columnIndex].push(course);
+                    }
+                });
+                
+                // 각 교시별로 렌더링
+                for (let period = 1; period <= 10; period++) {
+                    const cell = document.querySelector(`[data-day="${day}"][data-period="${period}"]`);
+                    if (!cell) continue;
+                    
+                    const container = document.createElement('div');
+                    container.className = 'class-container';
+                    
+                    // 각 열에서 이 교시에 해당하는 과목 찾기
+                    courseColumns.forEach(column => {
+                        const coursesInPeriod = column.filter(c => 
+                            c.startPeriod <= period && c.endPeriod >= period
+                        );
+                        
+                        if (coursesInPeriod.length > 0) {
+                            const course = coursesInPeriod[0];
+                            
+                            // 시작 교시인 경우만 전체 정보 표시
+                            if (course.startPeriod === period) {
+                                const classDiv = document.createElement('div');
+                                classDiv.className = 'class-info';
+                                classDiv.style.backgroundColor = course.color;
+                                classDiv.style.borderColor = course.borderColor;
+                                
+                                // 삭제 버튼
+                                const deleteBtn = document.createElement('button');
+                                deleteBtn.className = 'delete-btn';
+                                deleteBtn.textContent = '×';
+                                deleteBtn.onclick = function(e) {
+                                    e.stopPropagation();
+                                    deleteCourse(course.id);
+                                };
+                                classDiv.appendChild(deleteBtn);
+                                
+                                // 과목명
+                                const nameDiv = document.createElement('div');
+                                nameDiv.className = 'class-name';
+                                nameDiv.textContent = course.courseName;
+                                classDiv.appendChild(nameDiv);
+                                
+                                // 교수명
+                                if (course.professor) {
+                                    const profDiv = document.createElement('div');
+                                    profDiv.className = 'class-detail';
+                                    profDiv.textContent = `👤 ${course.professor}`;
+                                    classDiv.appendChild(profDiv);
+                                }
+                                
+                                // 강의실
+                                if (course.room) {
+                                    const roomDiv = document.createElement('div');
+                                    roomDiv.className = 'class-detail';
+                                    roomDiv.textContent = `📍 ${course.room}`;
+                                    classDiv.appendChild(roomDiv);
+                                }
+                                
+                                // 교시 정보
+                                const periodDiv = document.createElement('div');
+                                periodDiv.className = 'class-detail';
+                                const periodText = course.startPeriod === course.endPeriod 
+                                    ? `🕐 ${course.startPeriod}교시` 
+                                    : `🕐 ${course.startPeriod}-${course.endPeriod}교시`;
+                                periodDiv.textContent = periodText;
+                                classDiv.appendChild(periodDiv);
+                                
+                                container.appendChild(classDiv);
+                            } else {
+                                // 연속 교시인 경우 화살표만 표시
+                                const continueDiv = document.createElement('div');
+                                continueDiv.className = 'class-info';
+                                continueDiv.style.backgroundColor = course.color;
+                                continueDiv.style.borderColor = course.borderColor;
+                                continueDiv.style.opacity = '0.7';
+                                
+                                const nameDiv = document.createElement('div');
+                                nameDiv.className = 'class-name';
+                                nameDiv.style.fontSize = '12px';
+                                nameDiv.textContent = `↑ ${course.courseName}`;
+                                continueDiv.appendChild(nameDiv);
+                                
+                                container.appendChild(continueDiv);
+                            }
+                        } else {
+                            // 빈 공간 추가 (열 정렬 유지)
+                            const emptyDiv = document.createElement('div');
+                            emptyDiv.className = 'class-info';
+                            emptyDiv.style.visibility = 'hidden';
+                            emptyDiv.style.border = 'none';
+                            container.appendChild(emptyDiv);
+                        }
+                    });
+                    
+                    if (container.children.length > 0) {
+                        cell.appendChild(container);
+                    }
+                }
+            });
+        }
+
+        // 시간표 공유하기
+        function shareTimeTable() {
+            if (courses.length === 0) {
+                alert('공유할 과목이 없습니다.');
+                return;
+            }
+            
+            // 시간표 데이터를 Base64로 인코딩
+            const dataStr = JSON.stringify(courses);
+            const encodedData = btoa(encodeURIComponent(dataStr));
+            
+            // URL 생성
+            const currentUrl = window.location.href.split('?')[0];
+            const shareUrl = `${currentUrl}?data=${encodedData}`;
+            
+            // 클립보드에 복사
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert('공유 링크가 클립보드에 복사되었습니다!\n이 링크를 다른 사람에게 보내면 동일한 시간표를 볼 수 있습니다.');
+            }).catch(() => {
+                // 클립보드 복사 실패 시 직접 표시
+                prompt('이 링크를 복사해서 공유하세요:', shareUrl);
+            });
+        }
+        
+        // URL에서 공유된 데이터 불러오기
+        function loadSharedData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedData = urlParams.get('data');
+            
+            if (sharedData) {
+                try {
+                    const decodedData = decodeURIComponent(atob(sharedData));
+                    const sharedCourses = JSON.parse(decodedData);
+                    
+                    if (confirm('공유된 시간표를 불러오시겠습니까?\n(현재 시간표는 덮어씌워집니다)')) {
+                        courses = sharedCourses;
+                        saveData();
+                        renderTimetable();
+                        alert('공유된 시간표를 불러왔습니다!');
+                        
+                        // URL에서 파라미터 제거
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    }
+                } catch (error) {
+                    console.error('Error loading shared data:', error);
+                }
+            }
+        }
+
+        // 시간표 이미지로 다운로드
+        function downloadTimetable() {
+            const container = document.querySelector('.container');
+            
+            // html2canvas로 스크린샷 생성
+            html2canvas(container, {
+                scale: 2, // 고해상도
+                backgroundColor: '#ffffff',
+                logging: false,
+                useCORS: true
+            }).then(canvas => {
+                // Canvas를 이미지로 변환
+                const link = document.createElement('a');
+                const today = new Date();
+                const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                link.download = `수강신청_시간표_${dateStr}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(error => {
+                console.error('Error generating image:', error);
+                alert('이미지 생성 중 오류가 발생했습니다.');
+            });
+        }
+
+        // 페이지 로드 시 데이터 불러오기
+        window.onload = function() {
+            loadSharedData(); // 공유된 데이터 확인
+            loadData(); // 저장된 데이터 불러오기
+        };
+    </script>
+</body>
+</html>
